@@ -1,8 +1,8 @@
 function [ average,standardDeviation,degreeFreedom ] = StudentT( intArray )
     
     %Get degree of freedom based on sample size
-    [~,length] = size(intArray);
-    degreeFreedom = length - 1;
+    count = length(intArray);
+    degreeFreedom = count - 1;
     
     %Average of all elements in array
     average = mean(intArray);
