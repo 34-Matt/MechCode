@@ -1,7 +1,7 @@
 function [Cr,theta,fundamentalFreq,freqSet] = discreteFourier(sample, sampleRate)
     N = length(sample);
     if (rem(N,2) ~= 0)
-        sample = sample(end-1);
+        sample = sample(1:end-1);
         N = length(sample);
     elseif (N == 0)
         error("There is nothing in the sample array")
