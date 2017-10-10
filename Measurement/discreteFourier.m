@@ -1,4 +1,4 @@
-function [Cr,theta,fundamentalFreq,freqSet] = discreteFourier(sample, sampleRate)
+function [harmonicCoef,theta,fundamentalFreq,freqSet] = discreteFourier(sample, sampleRate)
     N = length(sample);
     if (rem(N,2) ~= 0)
         sample = sample(1:end-1);
@@ -30,4 +30,8 @@ function [Cr,theta,fundamentalFreq,freqSet] = discreteFourier(sample, sampleRate
     
     theta(1,:) = atan(Ar./Br);
     theta(2,:) = atan(Br./Ar);
+    
+    harmonicCoef(1,:) = Ar;
+    harmonicCoef(2,:) = Br;
+    harmonicCoef(3,:) = Cr;
 end
