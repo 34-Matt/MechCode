@@ -6,9 +6,11 @@ function [ Function ] = GenerateRampPulse( Amplitude, StartTime, EndTime )
 %       EndTime is the time when the pulse stops
 %   OUTPUT
 %       Function is the function handle for the response
-    
+    %%
+    % Setup step function
     u = @(t) t >= 0;
+    %%
+    % Generate ramp pulse
     Function = @(t) Amplitude .* ((t - StartTime) ./ (EndTime - StartTime)) .* (u(t - StartTime) - u(t - EndTime));
-
 end
 
