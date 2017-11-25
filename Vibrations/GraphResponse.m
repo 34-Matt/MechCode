@@ -1,4 +1,4 @@
-function GraphResponse( m, c, k, Force, time, startPos, startVel )
+function GraphResponse( m, c, k, Force, time, interval, startPos, startVel )
 %GraphResponse This function creates three charts of the force,
 %displacement, and velocity of a vibrating object
 %   INPUT:
@@ -6,17 +6,18 @@ function GraphResponse( m, c, k, Force, time, startPos, startVel )
 %       sytem.
 %       Force is the force responce acting on the system.  This can be a
 %       number or a function_handle
-%       time is the time after 0 that you want the graph to be running for.
+%       time is the time after 0 that you want the graph to be running for
+%       interval is the number of points between 0 and time
 %       startPos is the initial displacement of the system at time 0
 %       startVel is the initial velocity of the system at time 0
     %%
     % Setup repsonse equation
-    t = linspace(0,time,1000);    
+    t = linspace(0,time,interval);    
     if(isa(Force, 'function_handle'))
         y = Force(t);
         F = @(t,y) [y(2);(Force(t) - c .* y(2) - k .* y(1)) ./ m];
     elseif(isa(Force, 'double'))
-        y(1:1000) = Force;
+        y(1:interval) = Force;
         F = @(t,y) [y(2);(Force - c .* y(2) - k .* y(1)) ./ m];
     else
         disp("Unknown type " + class(Force))
