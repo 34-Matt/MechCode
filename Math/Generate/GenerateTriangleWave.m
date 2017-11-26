@@ -9,7 +9,9 @@ function [ Function ] = GenerateSawWave ( Amplitude, Type, Value )
 %   OUTPUT
 %       Function is the function handle for the response
     %%
-    % Convert saw wave to triangle wave
+    % Create saw wave
     Saw = GenerateSawWave(2 * Amplitude, Type, Value);
+    %%
+    % Convert saw wave to triangle wave
     Function = @(t) abs(Saw(t)) - Amplitude;
 end

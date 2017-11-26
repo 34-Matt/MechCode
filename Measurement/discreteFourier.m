@@ -12,8 +12,8 @@ function [harmonicCoef,theta,fundamentalFreq,nyquist,freqSet] = discreteFourier(
 %       fundamentalFreq The smallest frequency of the sample (units of Hz)
 %       nyquist The nyquist frequency of the sample (units of Hz)
 %       freqSet Array of fundamentalFreq time r (units of Hz)
-
-    %Determine if sample needs to be made even
+    %%
+    % Determine if sample needs to be made even
     N = length(sample);
     if (rem(N,2) ~= 0)
         sample = sample(1:end-1);
@@ -22,13 +22,13 @@ function [harmonicCoef,theta,fundamentalFreq,nyquist,freqSet] = discreteFourier(
         error("There is nothing in the sample array")
         return
     end
-    
-    %Determine frequencies
+    %%
+    % Determine frequencies
     T = N * sampleRate;
     fundamentalFreq = 1/T;
     nyquist = 1/(2*sampleRate);
-    
-    %Determine Ar and Br
+    %%
+    % Determine Ar and Br
     Ar = zeros(1,N/2+1);
     Br = Ar;
     freqSet = zeros(1,N/2+1);
@@ -42,20 +42,19 @@ function [harmonicCoef,theta,fundamentalFreq,nyquist,freqSet] = discreteFourier(
         Br(r+1) = Br(r+1) * 2 / N;
         freqSet(r+1) = r/T;
     end
-    
-    %Calculate Cr
+    %%
+    % Calculate Cr
     Cr2 = Ar.^2 + Br.^2;
     Cr = Cr2.^.5;
-    
-    %Store coefficients
+    %%
+    % Store coefficients
     harmonicCoef(1,:) = Ar;
     harmonicCoef(2,:) = Br;
     harmonicCoef(3,:) = Cr;
-    
-    %Calculate phases
+    %%
+    % Calculate phases
     Ar = abs(Ar);
     Br = abs(Br);
-    
     theta(1,:) = atan(Ar./Br);
     theta(2,:) = atan(Br./Ar);
 end
