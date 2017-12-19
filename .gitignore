@@ -1,3 +1,4 @@
-/html
-*/html
+## Ignore Matlab publishings
+*.html
+## Ignore Test Script
 /ExportScript.m
