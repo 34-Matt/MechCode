@@ -8,7 +8,7 @@ function [ y1 ] = interpolatePoints( x1, x0, x2, y0, y2 )
 %       y1 the value you wish to interpolate
     %%
     % Use interpolation method 
-    change = (x1-x0)/(x2-x1);
+    change = (x1-x0)/(x2-x0);
     y1 = y0 + change*(y2-y0);
 end
 
