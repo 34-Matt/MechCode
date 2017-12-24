@@ -1,4 +1,5 @@
 ## Ignore Matlab publishings
 *.html
+*.png
 ## Ignore Test Script
 /ExportScript.m
