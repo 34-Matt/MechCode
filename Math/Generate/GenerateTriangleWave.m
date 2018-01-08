@@ -1,4 +1,4 @@
-function [ Function ] = GenerateSawWave ( Amplitude, Type, Value )
+function [ Function ] = GenerateTriangleWave ( Amplitude, Type, Value )
 %GenerateSquarePusle creates a square pulse
 %   INPUT
 %       Amplitude is the amplitude of the pulse

@@ -9,9 +9,6 @@ function [ Function ] = GenerateSawWave ( Amplitude, Type, Value )
 %   OUTPUT
 %       Function is the function handle for the response
     %%
-    % Setup step function
-    u = @(t) t >= 0;
-    %%
     % Find period
     Type = upper(Type);
     if (strcmp(Type,"ANGULAR") || strcmp(Type,"ANGULAR FREQUENCY"))
