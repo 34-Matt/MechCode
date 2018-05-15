@@ -1,5 +1,7 @@
 ## Ignore Matlab publishings
 *.html
 *.png
-## Ignore Test Script
+## Ignore Test/Export Script
 /ExportScript.m
+*/html/*
+/TEMP/*
