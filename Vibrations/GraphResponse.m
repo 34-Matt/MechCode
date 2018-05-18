@@ -1,5 +1,5 @@
-function GraphResponse( m, c, k, Force, time, interval, startPos, startVel )
-%GraphResponse This function creates three charts of the force,
+function [TM,YZ] = GraphResponse( m, c, k, Force, time, interval, startPos, startVel, solver, h )
+%GraphResponse This function creates three charts of the force
 %displacement, and velocity of a vibrating object
 %   INPUT:
 %       m, c, and k are the mass, damping, and spring coefficents of the
@@ -10,23 +10,35 @@ function GraphResponse( m, c, k, Force, time, interval, startPos, startVel )
 %       interval is the number of points between 0 and time
 %       startPos is the initial displacement of the system at time 0
 %       startVel is the initial velocity of the system at time 0
+%       solver is the name of solver function (void to use ode45) (must be
+%           a function handle
+%       h is the step size of the solver
     %%
     % Setup repsonse equation
-    t = linspace(0,time,interval);    
-    if(isa(Force, 'function_handle'))
-        y = Force(t);
-        F = @(t,y) [y(2);(Force(t) - c .* y(2) - k .* y(1)) ./ m];
+    t = linspace(0,time,interval);
+    if ~sameSize(m, c, k, Force, startPos, startVel)
+        error("Sizes of matrices do not match")
+    elseif(isa(Force, 'function_handle'))
+        [row,~] = size(startPos);
+        for count = 1:length(t)
+            y(:,count) = Force(count);
+        end
+        F = @(t,y) [y(row+1:2*row);m\(Force(t) - c * y(row+1:2*row) - k * y(1:row))];
     elseif(isa(Force, 'double'))
-        y(1:interval) = Force;
-        F = @(t,y) [y(2);(Force - c .* y(2) - k .* y(1)) ./ m];
+        [row,~] = size(startPos);
+        y(:,1:interval) = Force;
+        F = @(t,y) [y(row+1:2*row);m\(Force - c * y(row+1:2*row) - k * y(1:row))];
     else
-        disp("Unknown type " + class(Force))
+        error("Unknown type " + class(Force))
     end
     %%
     % Display forcing function
     figure(1);
     hold on
-    plot(t,y,'k','LineWidth',2.0)
+    for count = 1:row
+        plot(t,y(count,:),'LineWidth',2.0)
+    end
+    plot(t,y,'LineWidth',2.0)
     xlabel('time, secs')
     ylabel('F(t)')
     title('THE GIVEN FORCING FUNCTION')
@@ -35,12 +47,20 @@ function GraphResponse( m, c, k, Force, time, interval, startPos, startVel )
     % Setup time span and differential
     tspan = [0, time];
     yinit = [startPos;startVel];
-    [TM,YZ] = ode45(F,tspan,yinit);
+    if exist('solver','var')
+        [YZ,TM] = solver(F,0,time,h,yinit);
+        YZ = YZ';
+        TM = TM';
+    else
+        [TM,YZ] = ode45(F,tspan,yinit);
+    end
     %%
     % Display displacement function
     figure(2);
     hold on
-    plot(TM,YZ(:,1),'k','LineWidth',2.0)
+    for count = 1:row
+        plot(TM,YZ(:,count),'LineWidth',2.0)
+    end
     xlabel('time, secs')
     ylabel('Displacement')
     title('Displacement Profile')
@@ -49,9 +69,23 @@ function GraphResponse( m, c, k, Force, time, interval, startPos, startVel )
     % Display velocity function
     figure(3);
     hold on
-    plot(TM,YZ(:,2),'k','LineWidth',2.0);
+    plot(TM,YZ(:,row+1:2*row),'LineWidth',2.0);
     xlabel('time, secs')
     ylabel('Velocity')
     title('Velocity Profile')
     hold off
+end
+function bool = sameSize(m, c, k, Force, startPos, startVel)
+    % Checks if the dimensions are correct
+    bool = isequal(size(m),size(c),size(k));
+    if ~bool
+        return
+    end
+    bool = isequal(size(Force(1)),size(startPos),size(startVel));
+    if ~bool
+        return
+    end
+    [row1,col1] = size(m);
+    [row2,col2] = size(Force(1));
+    bool = isequal(col1,row1) && isequal(row1,row2) && isequal(col2,1);
 end
