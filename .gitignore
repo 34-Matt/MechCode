@@ -1,6 +1,7 @@
 ## Ignore Matlab publishings
 *.html
 *.png
+*.asv
 ## Ignore Test/Export Script
 /ExportScript.m
 */html/*
