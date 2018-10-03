@@ -3,10 +3,7 @@ function [x,t] = RungeKutta2(f,ti,tf,h,xi,alpha)
     if ~exist('alpha','var')
         alpha = 2/3;
     end
-    if ischar(f)
-        f = str2func(f);
-    end
-    
+
     c = [0;alpha];
     a = [0,0;alpha,0];
     b = [(1-(1/(2*alpha))),(1/(2*alpha))];

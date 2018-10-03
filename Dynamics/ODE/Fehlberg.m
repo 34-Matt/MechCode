@@ -10,10 +10,6 @@ function [x,t,h] = Fehlberg(f,ti,tf,h0,x0,tol)
     b1 = [16/135 0 6656/12825 28561/56430 -9/50 2/55];
     b2 = [25/216 0 1408/2565 2197/4104 -1/5 0];
     
-    if ischar(f)
-        f = str2func(f);
-    end
-    
     t(1) = ti;
     count = 0;
     x(:,1) = x0;

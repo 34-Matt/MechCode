@@ -7,10 +7,6 @@ function [x,t] = RungeKutta4_3_8(f,ti,tf,h,xi)
         1 -1 1 0];
     b = [1/8,3/8,3/8,1/8];
     
-    if ischar(f)
-        f = str2func(f);
-    end
-    
     t = ti:h:tf;
     n = length(t);
     x = zeros(length(xi),n);
